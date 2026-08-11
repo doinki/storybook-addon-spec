@@ -1,0 +1,48 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "env": {
+    "builtin": true,
+    "browser": true
+  },
+  "options": {
+    "typeAware": true
+  },
+  "extends": [
+    "./oxlint/eslint.json",
+    "./oxlint/typescript.json",
+    "./oxlint/import.json",
+    "./oxlint/react.json",
+    "./oxlint/oxc.json",
+    "./oxlint/unicorn.json"
+  ],
+  "jsPlugins": ["eslint-plugin-perfectionist", "eslint-plugin-simple-import-sort", "eslint-plugin-storybook"],
+  "rules": {
+    "no-useless-default-assignment": "off",
+    "perfectionist/sort-heritage-clauses": "warn",
+    "perfectionist/sort-interfaces": "warn",
+    "perfectionist/sort-intersection-types": "warn",
+    "perfectionist/sort-object-types": "warn",
+    "perfectionist/sort-objects": "warn",
+    "perfectionist/sort-switch-case": "warn",
+    "perfectionist/sort-union-types": "warn",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.stories.tsx", "src/**/*.stories.ts"],
+      "rules": {
+        "storybook/await-interactions": "error",
+        "storybook/context-in-play-function": "error",
+        "storybook/default-exports": "error",
+        "storybook/hierarchy-separator": "warn",
+        "storybook/no-redundant-story-name": "warn",
+        "storybook/no-renderer-packages": "error",
+        "storybook/prefer-pascal-case": "warn",
+        "storybook/story-exports": "error",
+        "storybook/use-storybook-expect": "error",
+        "storybook/use-storybook-testing-library": "error"
+      }
+    }
+  ]
+}

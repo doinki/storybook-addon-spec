@@ -1,0 +1,104 @@
+{
+  "name": "storybook-addon-spec",
+  "version": "0.0.0",
+  "description": "Annotate story elements with state rules and interactions — numbered badges on the canvas, a spec table in the panel.",
+  "keywords": [
+    "addon",
+    "annotation",
+    "documentation",
+    "spec",
+    "storybook",
+    "storybook-addons"
+  ],
+  "homepage": "https://github.com/doinki/storybook-addon-spec#readme",
+  "bugs": "https://github.com/doinki/storybook-addon-spec/issues",
+  "license": "MIT",
+  "author": {
+    "name": "doinki",
+    "email": "doinki94@gmail.com",
+    "url": "https://github.com/doinki"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doinki/storybook-addon-spec.git"
+  },
+  "files": [
+    "dist",
+    "*.js"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./preview": {
+      "types": "./dist/preview.d.ts",
+      "default": "./dist/preview.js"
+    },
+    "./manager": "./dist/manager.js",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "prebuild": "node -e \"fs.rmSync('./dist', { recursive: true, force: true })\"",
+    "build": "tsup",
+    "build-storybook": "storybook build",
+    "fmt": "oxfmt",
+    "lint": "oxlint",
+    "lint:fix": "oxfmt && oxlint --fix",
+    "release": "pnpm run build && publint && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.1",
+    "@storybook/addon-themes": "next",
+    "@storybook/icons": "^2.1.0",
+    "@storybook/react-vite": "next",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "eslint-plugin-perfectionist": "^5.10.1",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "eslint-plugin-storybook": "next",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "publint": "^0.3.23",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "storybook": "next",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.1"
+  },
+  "peerDependencies": {
+    "storybook": "^10.0.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.19.0",
+      "onFail": "download"
+    }
+  },
+  "packageManager": "pnpm@11.21.0",
+  "bundler": {
+    "managerEntries": [
+      "src/manager.tsx"
+    ],
+    "previewEntries": [
+      "src/preview.ts",
+      "src/index.ts"
+    ]
+  },
+  "storybook": {
+    "displayName": "Spec",
+    "supportedFrameworks": [
+      "react"
+    ]
+  }
+}
