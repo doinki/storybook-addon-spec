@@ -1,6 +1,6 @@
 {
   "name": "storybook-addon-spec",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Annotate story elements with state rules and interactions — numbered badges on the canvas, a spec table in the panel.",
   "keywords": [
     "addon",

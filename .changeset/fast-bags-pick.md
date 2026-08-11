@@ -1,5 +1,0 @@
----
-"storybook-addon-spec": minor
----
-
-🚀
