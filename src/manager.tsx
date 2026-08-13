@@ -2,8 +2,8 @@ import React from 'react';
 import { AddonPanel } from 'storybook/internal/components';
 import { addons, types } from 'storybook/manager-api';
 
-import { SpecPanel } from './components/panel';
 import { ADDON_ID, PANEL_ID } from './constants';
+import { SpecPanel } from './panel';
 
 addons.register(ADDON_ID, () => {
   addons.add(PANEL_ID, {

@@ -2,9 +2,9 @@ import React from 'react';
 import { useChannel, useParameter, useStorybookState } from 'storybook/manager-api';
 import { styled } from 'storybook/theming';
 
-import { EVENTS, PARAM_KEY } from '../constants';
-import type { SpecParameter, SpecStatePayload } from '../types';
-import { normalizeAnnotations, numberSpecIds } from '../utils/annotations';
+import { numberSpecIds, resolveSpecAnnotations } from './annotations';
+import { EVENTS, PARAM_KEY } from './constants';
+import type { SpecHighlightPayload, SpecParameter, SpecStatePayload } from './types';
 
 const Wrapper = styled.div({
   height: '100%',
@@ -36,9 +36,11 @@ const SpecTable = styled.table(({ theme }) => ({
   width: '100%',
 }));
 
+const BADGE_BG = 'oklch(55.8% 0.288 302.321)';
+
 const NumberBadge = styled.span({
   alignItems: 'center',
-  background: 'oklch(55.8% 0.288 302.321)',
+  background: BADGE_BG,
   borderRadius: '50%',
   color: '#fff',
   display: 'inline-flex',
@@ -68,27 +70,38 @@ const Missing = styled.span(({ theme }) => ({
 export function SpecPanel() {
   const { storyId } = useStorybookState();
   const spec = useParameter<SpecParameter | undefined>(PARAM_KEY);
-  const annotations = normalizeAnnotations(spec?.annotations ?? []);
-  const [found, setFound] = React.useState<null | string[]>(null);
+  const annotations = resolveSpecAnnotations(spec);
+  const [foundIds, setFoundIds] = React.useState<null | string[]>(null);
 
   const emit = useChannel(
     {
       [EVENTS.STATE]: (payload: SpecStatePayload) => {
-        if (payload.storyId === storyId) setFound(payload.found);
+        if (payload.storyId === storyId) setFoundIds(payload.foundIds);
       },
     },
     [storyId],
   );
 
+  const highlight = React.useCallback(
+    (specId: null | string) => emit(EVENTS.HIGHLIGHT, { specId } satisfies SpecHighlightPayload),
+    [emit],
+  );
+
   React.useEffect(() => {
-    setFound(null);
-    emit(EVENTS.HIGHLIGHT, { specId: null });
+    setFoundIds(null);
+    highlight(null);
     emit(EVENTS.REQUEST_STATE);
-  }, [emit, storyId]);
+  }, [emit, highlight, storyId]);
 
-  const numbers = numberSpecIds(annotations);
+  React.useEffect(() => () => highlight(null), [highlight]);
 
-  if (annotations.length === 0) return null;
+  if (annotations == null) return null;
+
+  const badgeNumbers = numberSpecIds(annotations);
+
+  const rows = annotations.toSorted((a, b) => (badgeNumbers.get(a.id) ?? 0) - (badgeNumbers.get(b.id) ?? 0));
+
+  const isMissing = (id: string) => foundIds != null && !foundIds.includes(id);
 
   return (
     <Wrapper>
@@ -108,22 +121,22 @@ export function SpecPanel() {
           </tr>
         </thead>
         <tbody>
-          {annotations.map((annotation, index) => (
+          {rows.map((annotation, index) => (
             <tr
               key={`${annotation.id}-${index}`}
-              onBlur={() => emit(EVENTS.HIGHLIGHT, { specId: null })}
-              onFocus={() => emit(EVENTS.HIGHLIGHT, { specId: annotation.id })}
-              onPointerEnter={() => emit(EVENTS.HIGHLIGHT, { specId: annotation.id })}
-              onPointerLeave={() => emit(EVENTS.HIGHLIGHT, { specId: null })}
+              onBlur={() => highlight(null)}
+              onFocus={() => highlight(annotation.id)}
+              onPointerEnter={() => highlight(annotation.id)}
+              onPointerLeave={() => highlight(null)}
               tabIndex={0}
             >
               <td>
-                <NumberBadge>{numbers.get(annotation.id)}</NumberBadge>
+                <NumberBadge>{badgeNumbers.get(annotation.id)}</NumberBadge>
               </td>
               <LabelCell>
                 <LabelContent>
                   {annotation.label}
-                  {found != null && !found.includes(annotation.id) && <Missing>missing</Missing>}
+                  {isMissing(annotation.id) && <Missing>missing</Missing>}
                 </LabelContent>
               </LabelCell>
               <MutedCell>{annotation.state ?? '—'}</MutedCell>

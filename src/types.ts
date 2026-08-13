@@ -11,10 +11,14 @@ export interface NormalizedSpecAnnotation extends Omit<SpecAnnotation, 'id'> {
 
 export interface SpecParameter {
   annotations?: SpecAnnotation[];
-  showBadges?: boolean;
+  enabled?: boolean;
+}
+
+export interface SpecHighlightPayload {
+  specId: null | string;
 }
 
 export interface SpecStatePayload {
-  found: string[];
+  foundIds: string[];
   storyId: string;
 }

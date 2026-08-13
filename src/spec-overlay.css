@@ -1,0 +1,53 @@
+[data-slot='spec-layer'] {
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 2147483647;
+}
+
+[data-slot='spec-badge'] {
+  align-items: center;
+  background: var(--spec-badge-bg, oklch(55.8% 0.288 302.321));
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px var(--spec-badge-ring, #fff),
+    0 1px 2px var(--spec-badge-shadow, rgba(0, 0, 0, 0.15));
+  color: var(--spec-badge-fg, #fff);
+  display: inline-flex;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  height: 1.25rem;
+  justify-content: center;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 1.25rem;
+  z-index: 50;
+}
+
+[data-slot='spec-highlight'] {
+  background: var(--spec-highlight-bg, oklch(62.7% 0.265 303.9 / 0.1));
+  border-radius: 0.375rem;
+  box-shadow: 0 0 0 2px var(--spec-highlight-ring, oklch(55.8% 0.288 302.321 / 0.8));
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  z-index: 40;
+}
+
+[data-slot='spec-badge'][hidden],
+[data-slot='spec-highlight'][hidden] {
+  display: none;
+}
+
+.dark,
+[data-theme='dark'],
+:root:has(.dark, [data-theme='dark']) [data-slot='spec-layer'] {
+  --spec-badge-ring: oklch(29.1% 0.149 302.717);
+  --spec-badge-shadow: rgba(0, 0, 0, 0.4);
+  --spec-highlight-bg: oklch(71.4% 0.203 305.504 / 0.16);
+  --spec-highlight-ring: oklch(71.4% 0.203 305.504 / 0.9);
+}

@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "description": "Annotate story elements with state rules and interactions — numbered badges on the canvas, a spec table in the panel.",
   "keywords": [
-    "addon",
     "annotation",
+    "code",
     "documentation",
     "spec",
     "storybook",
-    "storybook-addons"
+    "storybook-addon"
   ],
   "homepage": "https://github.com/doinki/storybook-addon-spec#readme",
   "bugs": "https://github.com/doinki/storybook-addon-spec/issues",
@@ -43,9 +43,11 @@
     "access": "public"
   },
   "scripts": {
+    "prestorybook": "pnpm run build",
     "storybook": "storybook dev -p 6006",
     "prebuild": "node -e \"fs.rmSync('./dist', { recursive: true, force: true })\"",
     "build": "tsup",
+    "prebuild-storybook": "pnpm run build",
     "build-storybook": "storybook build",
     "fmt": "oxfmt",
     "lint": "oxlint",
@@ -98,7 +100,17 @@
   "storybook": {
     "displayName": "Spec",
     "supportedFrameworks": [
-      "react"
+      "angular",
+      "ember",
+      "html",
+      "preact",
+      "react",
+      "svelte",
+      "vue",
+      "web-components"
+    ],
+    "unsupportedFrameworks": [
+      "react-native"
     ]
   }
 }
